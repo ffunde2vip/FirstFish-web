@@ -43,6 +43,23 @@ service cloud.firestore {
     match /meta/{docId} {
       allow read, write: if isAdmin();
     }
+
+    // Новости и отзывы
+    match /news/{docId} {
+      allow read: if isPublished() || isAdmin();
+      allow write: if isAdmin();
+    }
+    match /reviews/{docId} {
+      // Чтение всем, запись всем авторизованным (или всем, если не хотите auth — замените на true)
+      allow read: if true;
+      allow write: if true; // при необходимости: isSignedIn()
+    }
+
+    // Конфигурация (например, ссылки на соцсети)
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }
 
