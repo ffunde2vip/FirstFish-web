@@ -1,7 +1,7 @@
 // Firebase App (client-side)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, where, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, getDocs, query, where, doc, getDoc, setDoc, addDoc, serverTimestamp, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyC4Q3JNkzU0tH0-pRYQr85ufBTotw63imo",
@@ -181,9 +181,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
         await Promise.all([
             loadPromotions(),
+            loadNews(),
             loadBeers(),
             loadVacancies(),
-            loadStores()
+            loadStores(),
+            loadReviews(),
+            loadSocialLinks()
         ]).catch(err => console.error('Firestore load error:', err));
         
         // Rebind handlers for newly inserted elements
@@ -235,6 +238,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         } catch (e) {
             console.error('Failed to load promotions:', e);
         }
+    }
+
+    async function loadNews() {
+        const container = document.querySelector('.news-grid');
+        if (!container) return;
+        try {
+            const colRef = collection(db, 'news');
+            const qy = query(colRef, where('published', '==', true));
+            const snap = await getDocs(qy);
+            const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            if (!docs.length) return;
+            container.innerHTML = '';
+            docs.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+            docs.forEach(n => {
+                const card = document.createElement('div');
+                card.className = 'promotion-card';
+                const h3 = document.createElement('h3'); setText(h3, n.title || 'Новость');
+                const p = document.createElement('p'); setText(p, n.text || '');
+                const span = document.createElement('span'); span.className = 'promotion-date'; setText(span, n.dateLabel || '');
+                card.appendChild(h3); card.appendChild(p); card.appendChild(span);
+                container.appendChild(card);
+            });
+        } catch (e) { console.error('Failed to load news:', e); }
     }
     
     async function loadBeers() {
@@ -385,6 +411,78 @@ document.addEventListener('DOMContentLoaded', async function() {
         } catch (e) {
             console.error('Failed to load stores:', e);
         }
+    }
+
+    // Reviews
+    async function loadReviews() {
+        const list = document.getElementById('reviewsList');
+        if (!list) return;
+        try {
+            const snap = await getDocs(query(collection(db, 'reviews')));
+            const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            list.innerHTML = '';
+            docs.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+            docs.forEach(r => {
+                const card = document.createElement('div');
+                card.className = 'promotion-card';
+                const h3 = document.createElement('h3'); setText(h3, r.name || 'Аноним');
+                const p = document.createElement('p'); setText(p, r.text || '');
+                card.appendChild(h3); card.appendChild(p);
+                list.appendChild(card);
+            });
+        } catch (e) { console.error('Failed to load reviews:', e); }
+    }
+
+    const reviewForm = document.getElementById('reviewForm');
+    const reviewStatus = document.getElementById('reviewStatus');
+    if (reviewForm && db) {
+        reviewForm.addEventListener('submit', async () => {
+            const name = document.getElementById('reviewName').value.trim();
+            const text = document.getElementById('reviewText').value.trim();
+            if (!name || !text) return;
+            try {
+                await addDoc(collection(db, 'reviews'), { name, text, createdAt: serverTimestamp() });
+                if (reviewStatus) reviewStatus.textContent = 'Спасибо за отзыв!';
+                document.getElementById('reviewName').value = '';
+                document.getElementById('reviewText').value = '';
+                await loadReviews();
+                setTimeout(() => { if (reviewStatus) reviewStatus.textContent = ''; }, 2500);
+            } catch (e) {
+                console.error('Failed to send review:', e);
+                if (reviewStatus) reviewStatus.textContent = 'Ошибка отправки';
+            }
+        });
+    }
+
+    // Dynamic social links
+    async function loadSocialLinks() {
+        try {
+            const snap = await getDoc(doc(db, 'config', 'social'));
+            const cfg = snap.exists() ? snap.data() : {};
+            document.querySelectorAll('.social-link').forEach(a => {
+                const key = a.getAttribute('data-social');
+                const url = cfg[key];
+                if (url) {
+                    a.onclick = (e) => { e.preventDefault(); window.open(url, '_blank'); };
+                }
+            });
+        } catch (e) { console.warn('Social links config missing'); }
+    }
+
+    // Admin login button
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    if (adminLoginBtn && auth) {
+        adminLoginBtn.addEventListener('click', async () => {
+            try {
+                const email = window.prompt('Email администратора:');
+                const password = window.prompt('Пароль:');
+                if (!email || !password) return;
+                await signInWithEmailAndPassword(auth, email, password);
+                alert('Вход выполнен. Теперь можно публиковать новости через ?login=1 для автосида или отдельную админку.');
+            } catch (e) {
+                alert('Ошибка входа: ' + (e?.code || e?.message || e));
+            }
+        });
     }
     
     // Handle image loading errors
