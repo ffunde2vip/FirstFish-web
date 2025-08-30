@@ -469,21 +469,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         } catch (e) { console.warn('Social links config missing'); }
     }
 
-    // Admin login button
-    const adminLoginBtn = document.getElementById('adminLoginBtn');
-    if (adminLoginBtn && auth) {
-        adminLoginBtn.addEventListener('click', async () => {
-            try {
-                const email = window.prompt('Email администратора:');
-                const password = window.prompt('Пароль:');
-                if (!email || !password) return;
-                await signInWithEmailAndPassword(auth, email, password);
-                alert('Вход выполнен. Теперь можно публиковать новости через ?login=1 для автосида или отдельную админку.');
-            } catch (e) {
-                alert('Ошибка входа: ' + (e?.code || e?.message || e));
-            }
-        });
-    }
+    // Admin button now just links to admin.html (no prompts)
     
     // Handle image loading errors
     function handleImageError(img) {
