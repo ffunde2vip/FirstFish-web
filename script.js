@@ -1,6 +1,7 @@
 // Firebase App (client-side)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, getDocs, query, where, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyC4Q3JNkzU0tH0-pRYQr85ufBTotw63imo",
@@ -13,9 +14,11 @@ const firebaseConfig = {
 };
 
 let db = null;
+let auth = null;
 try {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
+    auth = getAuth(app);
     console.log('Firebase initialized');
 } catch (e) {
     console.warn('Firebase not initialized. Set firebaseConfig.', e);
@@ -24,6 +27,146 @@ try {
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM loaded, initializing scripts...');
+    
+    // Optional quick login via URL: ?login=1
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (auth && params.get('login') === '1') {
+            const email = window.prompt('Email администратора:');
+            const password = window.prompt('Пароль:');
+            if (email && password) {
+                await signInWithEmailAndPassword(auth, email, password);
+            }
+        }
+    } catch (_) {}
+
+    // Seed default content once after admin signs in
+    async function isAdmin(uid) {
+        try {
+            const adminSnap = await getDoc(doc(db, 'admins', uid));
+            return adminSnap.exists();
+        } catch (_) { return false; }
+    }
+
+    async function seedDataIfNeeded(currentUser) {
+        if (!db || !currentUser) return;
+        const metaRef = doc(db, 'meta', 'seed_v1');
+        const metaSnap = await getDoc(metaRef);
+        if (metaSnap.exists()) return; // already seeded
+        const uid = currentUser.uid;
+        if (!(await isAdmin(uid))) return;
+
+        const writes = [];
+        // promotions
+        writes.push(setDoc(doc(db, 'promotions', 'promo1'), {
+            title: 'Скидка на крафтовое пиво',
+            description: 'Все крафтовые сорта пива со скидкой 20% до конца недели',
+            badge: '-20%',
+            dateLabel: 'До 31 декабря',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'promotions', 'promo2'), {
+            title: 'Три по цене двух',
+            description: 'При покупке двух бутылок пива третья в подарок',
+            badge: '2+1',
+            dateLabel: 'Постоянно',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'promotions', 'promo3'), {
+            title: 'Новые сорта пива',
+            description: 'Попробуйте новые эксклюзивные сорта от лучших пивоварен',
+            badge: 'Новинка',
+            dateLabel: 'Новинка',
+            published: true
+        }));
+
+        // beers
+        writes.push(setDoc(doc(db, 'beers', 'beer1'), {
+            title: 'IPA Крафт',
+            description: 'Крепкое крафтовое пиво с хмелевым вкусом',
+            price: 350,
+            category: 'craft',
+            imageUrl: 'https://via.placeholder.com/300x400/1e40af/ffffff?text=Крафт+Пиво',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'beers', 'beer2'), {
+            title: 'Heineken',
+            description: 'Классическое голландское пиво',
+            price: 280,
+            category: 'import',
+            imageUrl: 'https://via.placeholder.com/300x400/1e40af/ffffff?text=Импорт+Пиво',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'beers', 'beer3'), {
+            title: 'Балтика',
+            description: 'Популярное российское пиво',
+            price: 220,
+            category: 'local',
+            imageUrl: 'https://via.placeholder.com/300x400/1e40af/ffffff?text=Местное+Пиво',
+            published: true
+        }));
+
+        // vacancies
+        writes.push(setDoc(doc(db, 'vacancies', 'vac1'), {
+            title: 'Продавец-консультант',
+            salary: 'от 45 000₽',
+            employment: 'Полная занятость',
+            schedule: 'График 5/2',
+            experience: 'Опыт от 1 года',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'vacancies', 'vac2'), {
+            title: 'Менеджер по закупкам',
+            salary: 'от 60 000₽',
+            employment: 'Полная занятость',
+            schedule: 'График 5/2',
+            experience: 'Опыт от 3 лет',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'vacancies', 'vac3'), {
+            title: 'Грузчик',
+            salary: 'от 35 000₽',
+            employment: 'Полная занятость',
+            schedule: 'График 5/2',
+            experience: 'Без опыта',
+            published: true
+        }));
+
+        // stores
+        writes.push(setDoc(doc(db, 'stores', 'store1'), {
+            title: 'Первый Рыбный - Центр',
+            address: 'ул. Ленина, 15, Москва',
+            phone: '+7 (495) 123-45-67',
+            hours: 'Пн-Вс: 09:00 - 23:00',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'stores', 'store2'), {
+            title: 'Первый Рыбный - Север',
+            address: 'ул. Мира, 42, Москва',
+            phone: '+7 (495) 234-56-78',
+            hours: 'Пн-Вс: 10:00 - 22:00',
+            published: true
+        }));
+        writes.push(setDoc(doc(db, 'stores', 'store3'), {
+            title: 'Первый Рыбный - Юг',
+            address: 'ул. Пушкина, 8, Москва',
+            phone: '+7 (495) 345-67-89',
+            hours: 'Пн-Вс: 08:00 - 24:00',
+            published: true
+        }));
+
+        await Promise.all(writes);
+        await setDoc(metaRef, { seededAt: Date.now(), by: uid });
+        console.log('Default content seeded');
+    }
+
+    if (auth) {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                seedDataIfNeeded(user).catch(console.error);
+            }
+        });
+    }
     
     // Helper to safely set text
     const setText = (el, text) => {
