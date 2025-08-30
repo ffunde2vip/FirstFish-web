@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Админка — Первый Рыбный</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-wrap { max-width: 1100px; margin: 90px auto 40px; padding: 0 20px; }
+        .admin-card { background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.08); padding:20px; margin-bottom:20px; }
+        .admin-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .admin-grid input, .admin-grid textarea, .admin-grid select { width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; }
+        .admin-head { display:flex; justify-content:space-between; align-items:center; }
+        .muted { color:#64748b; }
+        .danger { background:#ef4444; color:#fff; }
+        .success { background:#10b981; color:#fff; }
+        .warning { background:#f59e0b; color:#fff; }
+        .section-title { margin-top:0; }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container admin-head">
+                <div class="nav-logo"><span class="logo-text">Админка</span></div>
+                <div>
+                    <a href="index.html" class="btn btn-secondary">На сайт</a>
+                    <button id="logoutBtn" class="btn warning">Выйти</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="admin-wrap">
+        <section class="admin-card" id="auth">
+            <h2 class="section-title">Авторизация</h2>
+            <div class="admin-grid" style="grid-template-columns:1fr 1fr;">
+                <div>
+                    <label>Email</label>
+                    <input id="email" type="email" placeholder="admin@example.com">
+                </div>
+                <div>
+                    <label>Пароль</label>
+                    <input id="password" type="password" placeholder="••••••••">
+                </div>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+                <button id="loginBtn" class="btn btn-primary">Войти</button>
+                <span id="authStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="news">
+            <h2 class="section-title">Новости</h2>
+            <div class="admin-grid">
+                <input id="newsId" placeholder="ID (пусто=создать)">
+                <input id="newsTitle" placeholder="Заголовок">
+                <textarea id="newsText" rows="3" placeholder="Текст новости"></textarea>
+                <input id="newsDate" placeholder="Подпись/дата (напр. 12.10.2025)">
+                <select id="newsPublished"><option value="true">Опубликовано: true</option><option value="false">Опубликовано: false</option></select>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="newsSave" class="btn success">Опубликовать / Сохранить</button>
+                <button id="newsDelete" class="btn danger">Удалить</button>
+                <span id="newsStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="promotions">
+            <h2 class="section-title">Акции</h2>
+            <div class="admin-grid">
+                <input id="promoId" placeholder="ID (пусто=создать)">
+                <input id="promoTitle" placeholder="Заголовок">
+                <input id="promoBadge" placeholder="Бейдж (напр. -20% или 2+1)">
+                <textarea id="promoDesc" rows="2" placeholder="Описание"></textarea>
+                <input id="promoDate" placeholder="Подпись/дата">
+                <select id="promoPublished"><option value="true">Опубликовано: true</option><option value="false">Опубликовано: false</option></select>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="promoSave" class="btn success">Сохранить</button>
+                <button id="promoDelete" class="btn danger">Удалить</button>
+                <span id="promoStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="beers">
+            <h2 class="section-title">Пиво</h2>
+            <div class="admin-grid">
+                <input id="beerId" placeholder="ID (пусто=создать)">
+                <input id="beerTitle" placeholder="Название">
+                <textarea id="beerDesc" rows="2" placeholder="Описание"></textarea>
+                <input id="beerPrice" placeholder="Цена (число/строка)">
+                <input id="beerCategory" placeholder="Категория (all/craft/import/local)">
+                <input id="beerImage" placeholder="Ссылка на изображение">
+                <select id="beerPublished"><option value="true">Опубликовано: true</option><option value="false">Опубликовано: false</option></select>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="beerSave" class="btn success">Сохранить</button>
+                <button id="beerDelete" class="btn danger">Удалить</button>
+                <span id="beerStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="vacancies">
+            <h2 class="section-title">Вакансии</h2>
+            <div class="admin-grid">
+                <input id="vacId" placeholder="ID (пусто=создать)">
+                <input id="vacTitle" placeholder="Название (грузчик/оператор/водитель/бухгалтер)">
+                <input id="vacSalary" placeholder="Зарплата (напр. от 45 000₽)">
+                <input id="vacEmployment" placeholder="Занятость (Полная/Частичная)">
+                <input id="vacSchedule" placeholder="График (5/2, сменный и т.п.)">
+                <input id="vacExperience" placeholder="Опыт (Без опыта/от 1 года)">
+                <select id="vacPublished"><option value="true">Опубликовано: true</option><option value="false">Опубликовано: false</option></select>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="vacSave" class="btn success">Сохранить</button>
+                <button id="vacDelete" class="btn danger">Удалить</button>
+                <span id="vacStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="stores">
+            <h2 class="section-title">Магазины</h2>
+            <div class="admin-grid">
+                <input id="storeId" placeholder="ID (пусто=создать)">
+                <input id="storeTitle" placeholder="Название">
+                <input id="storeAddress" placeholder="Адрес">
+                <input id="storePhone" placeholder="Телефон">
+                <input id="storeHours" placeholder="Часы работы">
+                <select id="storePublished"><option value="true">Опубликовано: true</option><option value="false">Опубликовано: false</option></select>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="storeSave" class="btn success">Сохранить</button>
+                <button id="storeDelete" class="btn danger">Удалить</button>
+                <span id="storeStatus" class="muted"></span>
+            </div>
+        </section>
+
+        <section class="admin-card" id="social">
+            <h2 class="section-title">Соцсети</h2>
+            <div class="admin-grid">
+                <input id="vkLink" placeholder="VK URL">
+                <input id="tgLink" placeholder="Telegram URL">
+                <input id="igLink" placeholder="Instagram URL">
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                <button id="socialSave" class="btn success">Сохранить</button>
+                <span id="socialStatus" class="muted"></span>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
+
+
