@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#1e40af">
+    <meta name="description" content="Первый Рыбный - лучший выбор пива и рыбных продуктов в городе">
+    <meta name="keywords" content="пиво, крафтовое пиво, рыбные продукты, магазин">
+    <title>Первый Рыбный - Пивной магазин</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="img/logo.png" alt="Первый Рыбный" class="logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display: none;">Первый Рыбный</span>
+                    <span class="logo-text">Первый Рыбный</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#promotions" class="nav-link">Акции</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#beer" class="nav-link">Пиво</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#vacancies" class="nav-link">Вакансии</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contacts" class="nav-link">Контакты</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Добро пожаловать в Первый Рыбный</h1>
+                <p class="hero-subtitle">Лучший выбор пива и рыбных продуктов в городе</p>
+                <div class="hero-buttons">
+                    <a href="#beer" class="btn btn-primary">Наше пиво</a>
+                    <a href="#promotions" class="btn btn-secondary">Акции</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="img/logo.png" alt="Первый Рыбный" class="hero-logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'hero-logo-placeholder\'>🍺</div>';">
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section id="promotions" class="promotions">
+        <div class="container">
+            <h2 class="section-title">Акции и спецпредложения</h2>
+            <div class="promotions-grid">
+                <div class="promotion-card">
+                    <div class="promotion-badge">-20%</div>
+                    <h3>Скидка на крафтовое пиво</h3>
+                    <p>Все крафтовые сорта пива со скидкой 20% до конца недели</p>
+                    <span class="promotion-date">До 31 декабря</span>
+                </div>
+                <div class="promotion-card">
+                    <div class="promotion-badge">2+1</div>
+                    <h3>Акция "Три по цене двух"</h3>
+                    <p>При покупке двух бутылок пива третья в подарок</p>
+                    <span class="promotion-date">Постоянно</span>
+                </div>
+                <div class="promotion-card">
+                    <div class="promotion-badge">Новинка</div>
+                    <h3>Новые сорта пива</h3>
+                    <p>Попробуйте новые эксклюзивные сорта от лучших пивоварен</p>
+                    <span class="promotion-date">Новинка</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beer Section -->
+    <section id="beer" class="beer">
+        <div class="container">
+            <h2 class="section-title">Наше пиво</h2>
+            <div class="beer-categories">
+                <div class="category-tabs">
+                    <button class="tab-btn active" data-category="all">Все</button>
+                    <button class="tab-btn" data-category="craft">Крафтовое</button>
+                    <button class="tab-btn" data-category="import">Импортное</button>
+                    <button class="tab-btn" data-category="local">Местное</button>
+                </div>
+            </div>
+            <div class="beer-grid">
+                <div class="beer-card" data-category="craft">
+                    <div class="beer-image">
+                        <img src="https://via.placeholder.com/300x400/1e40af/ffffff?text=Крафт+Пиво" alt="Крафтовое пиво">
+                    </div>
+                    <div class="beer-info">
+                        <h3>IPA Крафт</h3>
+                        <p>Крепкое крафтовое пиво с хмелевым вкусом</p>
+                        <span class="beer-price">350₽</span>
+                    </div>
+                </div>
+                <div class="beer-card" data-category="import">
+                    <div class="beer-image">
+                        <img src="https://via.placeholder.com/300x400/1e40af/ffffff?text=Импорт+Пиво" alt="Импортное пиво">
+                    </div>
+                    <div class="beer-info">
+                        <h3>Heineken</h3>
+                        <p>Классическое голландское пиво</p>
+                        <span class="beer-price">280₽</span>
+                    </div>
+                </div>
+                <div class="beer-card" data-category="local">
+                    <div class="beer-image">
+                        <img src="https://via.placeholder.com/300x400/1e40af/ffffff?text=Местное+Пиво" alt="Местное пиво">
+                    </div>
+                    <div class="beer-info">
+                        <h3>Балтика</h3>
+                        <p>Популярное российское пиво</p>
+                        <span class="beer-price">220₽</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vacancies Section -->
+    <section id="vacancies" class="vacancies">
+        <div class="container">
+            <h2 class="section-title">Вакансии</h2>
+            <div class="vacancies-grid">
+                <div class="vacancy-card">
+                    <div class="vacancy-header">
+                        <h3>Продавец-консультант</h3>
+                        <span class="salary">от 45 000₽</span>
+                    </div>
+                    <div class="vacancy-details">
+                        <p><i class="fas fa-map-marker-alt"></i> Полная занятость</p>
+                        <p><i class="fas fa-clock"></i> График 5/2</p>
+                        <p><i class="fas fa-graduation-cap"></i> Опыт от 1 года</p>
+                    </div>
+                    <button class="btn btn-primary">Откликнуться</button>
+                </div>
+                <div class="vacancy-card">
+                    <div class="vacancy-header">
+                        <h3>Менеджер по закупкам</h3>
+                        <span class="salary">от 60 000₽</span>
+                    </div>
+                    <div class="vacancy-details">
+                        <p><i class="fas fa-map-marker-alt"></i> Полная занятость</p>
+                        <p><i class="fas fa-clock"></i> График 5/2</p>
+                        <p><i class="fas fa-graduation-cap"></i> Опыт от 3 лет</p>
+                    </div>
+                    <button class="btn btn-primary">Откликнуться</button>
+                </div>
+                <div class="vacancy-card">
+                    <div class="vacancy-header">
+                        <h3>Грузчик</h3>
+                        <span class="salary">от 35 000₽</span>
+                    </div>
+                    <div class="vacancy-details">
+                        <p><i class="fas fa-map-marker-alt"></i> Полная занятость</p>
+                        <p><i class="fas fa-clock"></i> График 5/2</p>
+                        <p><i class="fas fa-graduation-cap"></i> Без опыта</p>
+                    </div>
+                    <button class="btn btn-primary">Откликнуться</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacts Section -->
+    <section id="contacts" class="contacts">
+        <div class="container">
+            <h2 class="section-title">Наши магазины</h2>
+            <div class="stores-grid">
+                <div class="store-card">
+                    <div class="store-header">
+                        <h3>Первый Рыбный - Центр</h3>
+                        <span class="store-status open">Открыто</span>
+                    </div>
+                    <div class="store-info">
+                        <p><i class="fas fa-map-marker-alt"></i> ул. Ленина, 15, Москва</p>
+                        <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                        <p><i class="fas fa-clock"></i> Пн-Вс: 09:00 - 23:00</p>
+                    </div>
+                    <div class="store-actions">
+                        <button class="btn btn-secondary">Показать на карте</button>
+                    </div>
+                </div>
+                <div class="store-card">
+                    <div class="store-header">
+                        <h3>Первый Рыбный - Север</h3>
+                        <span class="store-status open">Открыто</span>
+                    </div>
+                    <div class="store-info">
+                        <p><i class="fas fa-map-marker-alt"></i> ул. Мира, 42, Москва</p>
+                        <p><i class="fas fa-phone"></i> +7 (495) 234-56-78</p>
+                        <p><i class="fas fa-clock"></i> Пн-Вс: 10:00 - 22:00</p>
+                    </div>
+                    <div class="store-actions">
+                        <button class="btn btn-secondary">Показать на карте</button>
+                    </div>
+                </div>
+                <div class="store-card">
+                    <div class="store-header">
+                        <h3>Первый Рыбный - Юг</h3>
+                        <span class="store-status closed">Закрыто</span>
+                    </div>
+                    <div class="store-info">
+                        <p><i class="fas fa-map-marker-alt"></i> ул. Пушкина, 8, Москва</p>
+                        <p><i class="fas fa-phone"></i> +7 (495) 345-67-89</p>
+                        <p><i class="fas fa-clock"></i> Пн-Вс: 08:00 - 24:00</p>
+                    </div>
+                    <div class="store-actions">
+                        <button class="btn btn-secondary">Показать на карте</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="img/logo.png" alt="Первый Рыбный" class="footer-logo-img">
+                        <span>Первый Рыбный</span>
+                    </div>
+                    <p>Лучший выбор пива и рыбных продуктов в городе</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                    <p><i class="fas fa-envelope"></i> info@pervy-rybny.ru</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link vk">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Режим работы</h4>
+                    <p>Понедельник - Воскресенье</p>
+                    <p>09:00 - 23:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Первый Рыбный. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
