@@ -38,6 +38,9 @@
                         <a href="#promotions" class="nav-link">Акции</a>
                     </li>
                     <li class="nav-item">
+                        <a href="#news" class="nav-link">Новости</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#beer" class="nav-link">Пиво</a>
                     </li>
                     <li class="nav-item">
@@ -46,12 +49,16 @@
                     <li class="nav-item">
                         <a href="#contacts" class="nav-link">Контакты</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#reviews" class="nav-link">Отзывы</a>
+                    </li>
                 </ul>
                 <div class="hamburger">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
                 </div>
+                <a id="adminLoginBtn" class="btn btn-secondary" style="margin-left:12px;">Войти</a>
             </div>
         </nav>
     </header>
@@ -69,6 +76,39 @@
             </div>
             <div class="hero-image">
                 <img src="img/logo.png" alt="Первый Рыбный" class="hero-logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'hero-logo-placeholder\'>🍺</div>';">
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section (moved to bottom) -->
+    <section id="reviews" class="vacancies" style="background:#ffffff;">
+        <div class="container">
+            <h2 class="section-title">Отзывы</h2>
+            <div class="review-form-card promotion-card" style="margin-bottom:2rem;">
+                <h3 style="margin-bottom:1rem; color:#1e40af;">Оставить отзыв</h3>
+                <form id="reviewForm" class="review-form" onsubmit="return false;">
+                    <div style="display:grid; grid-template-columns:1fr 2fr; gap:1rem;">
+                        <input id="reviewName" type="text" placeholder="Ваше имя" required style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;">
+                        <textarea id="reviewText" rows="3" placeholder="Ваш отзыв" required style="padding:12px; border:1px solid #e5e7eb; border-radius:8px;"></textarea>
+                    </div>
+                    <div style="margin-top:1rem;">
+                        <button id="sendReviewBtn" class="btn btn-primary">Отправить</button>
+                        <span id="reviewStatus" style="margin-left:10px; color:#64748b;"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="reviews-list promotions-grid" id="reviewsList">
+                <!-- Отзывы загружаются из Firestore -->
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="promotions" style="background:#ffffff;">
+        <div class="container">
+            <h2 class="section-title">Новости</h2>
+            <div class="news-grid promotions-grid">
+                <!-- Новости будут подгружаться из Firestore -->
             </div>
         </div>
     </section>
@@ -99,6 +139,8 @@
             </div>
         </div>
     </section>
+
+    
 
     <!-- Beer Section -->
     <section id="beer" class="beer">
@@ -259,13 +301,13 @@
                     <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
                     <p><i class="fas fa-envelope"></i> info@pervy-rybny.ru</p>
                     <div class="social-links">
-                        <a href="#" class="social-link vk">
+                        <a href="#" class="social-link vk" data-social="vk">
                             <i class="fab fa-vk"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a href="#" class="social-link" data-social="telegram">
                             <i class="fab fa-telegram"></i>
                         </a>
-                        <a href="#" class="social-link">
+                        <a href="#" class="social-link" data-social="instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                     </div>
