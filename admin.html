@@ -16,6 +16,8 @@
         .success { background:#10b981; color:#fff; }
         .warning { background:#f59e0b; color:#fff; }
         .section-title { margin-top:0; }
+        .admin-tiles { display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:20px; }
+        .admin-tiles .admin-card { margin-bottom:0; }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -52,6 +54,7 @@
             </div>
         </section>
 
+        <div class="admin-tiles">
         <section class="admin-card" id="news">
             <h2 class="section-title">Новости</h2>
             <div class="admin-grid">
@@ -150,6 +153,7 @@
                 <span id="socialStatus" class="muted"></span>
             </div>
         </section>
+        </div>
     </main>
 
     <script type="module" src="admin.js"></script>
