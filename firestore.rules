@@ -38,6 +38,11 @@ service cloud.firestore {
       allow read: if isPublished() || isAdmin();
       allow write: if isAdmin();
     }
+
+    // Meta flags (например, meta/seed_v1) — доступны только админам
+    match /meta/{docId} {
+      allow read, write: if isAdmin();
+    }
   }
 }
 
